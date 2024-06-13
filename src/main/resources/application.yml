@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: dev-service
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/start_db?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 1902608505
+    hikari:
+      #设置事务自动提交
+      auto-commit: true
+      #设置最大连接数
+      maximum-pool-size: 10
+      minimum-idle: 10
+      #获取连接是，检测语句
+      connection-test-query: select 1
+      #连接超时时间
+      connection-timeout: 20000
+      #其它属性
+
+mybatis-plus:
+  configuration:
+    #开启驼峰命名自动映射
+    map-underscore-to-camel-case: true
+    #开启日志打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.sdpzhong.dev.entity
+  #扫描mapper文件
+  #mapper-locations: classpath:mapper/**/*.xml
+
+server:
+  port: 9377

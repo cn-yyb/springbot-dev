@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdpzhong.dev.mapper.UserMapper">
+    <!--  查询用户信息 -->
+    <sql id="getUserByUsernameQueryColumnList">
+        user_id
+        , uid, account_name, gender, mobile
+    </sql>
+    <select id="getUserByUsername" resultType="com.sdpzhong.dev.entity.po.User">
+        select
+        <include refid="getUserByUsernameQueryColumnList"/>
+        from users
+        where account_name = #{username}
+    </select>
+</mapper>
