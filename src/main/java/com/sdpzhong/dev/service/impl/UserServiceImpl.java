@@ -9,6 +9,7 @@ import com.sdpzhong.dev.mapper.UserMapper;
 import com.sdpzhong.dev.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final UserMapper userMapper;
 
+    private RedisTemplate redisTemplate;
+
     @Override
     public List<User> getUserList() {
+        String data = (String) redisTemplate.opsForValue().get("username");
+
+        log.info("redis data: {}", data);
+
         List<User> res = userMapper.selectList(null);
         log.info("getUserList: {}", res);
         return res;

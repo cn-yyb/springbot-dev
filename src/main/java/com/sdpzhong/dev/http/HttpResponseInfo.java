@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class HttpResponseInfo<T> {
 
-    private Integer code; //状态码
+    private Integer errcode; //状态码
 
-    private String msg; //提示信息
+    private String errmsg; //提示信息
 
     private T data; //数据
 
@@ -20,16 +20,16 @@ public class HttpResponseInfo<T> {
 
     public static <T> HttpResponseInfo<T> success(T data) {
         HttpResponseInfo<T> r = new HttpResponseInfo<>();
-        r.setCode(HttpReturnCode.RC200.getCode());
-        r.setMsg(HttpReturnCode.RC200.getMsg());
+        r.setErrcode(HttpReturnCode.RC_NORMAL.getCode());
+        r.setErrmsg(HttpReturnCode.RC_NORMAL.getMsg());
         r.setData(data);
         return r;
     }
 
     public static <T> HttpResponseInfo<T> error(int code, String msg) {
         HttpResponseInfo<T> r = new HttpResponseInfo<>();
-        r.setCode(code);
-        r.setMsg(msg);
+        r.setErrcode(code);
+        r.setErrmsg(msg);
         r.setData(null);
         return r;
     }

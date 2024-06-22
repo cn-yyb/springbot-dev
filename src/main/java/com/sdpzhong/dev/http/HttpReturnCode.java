@@ -1,6 +1,10 @@
 package com.sdpzhong.dev.http;
 
+import lombok.Getter;
+
+@Getter
 public enum HttpReturnCode {
+    RC_NORMAL(0, "ok"),
     RC200(200, "ok"),
     RC400(400, "请求失败，参数错误，请检查后重试。"),
     RC404(404, "未找到您请求的资源。"),
@@ -18,11 +22,4 @@ public enum HttpReturnCode {
         this.msg = msg;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
 }
