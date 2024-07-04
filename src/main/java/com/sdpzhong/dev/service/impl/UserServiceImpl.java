@@ -1,5 +1,7 @@
 package com.sdpzhong.dev.service.impl;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sdpzhong.dev.entity.dto.UserLoginFormDto;
 import com.sdpzhong.dev.entity.dto.UserLoginFormResponse;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +25,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final UserMapper userMapper;
 
-    private RedisTemplate redisTemplate;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public List<User> getUserList() {
@@ -48,7 +52,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = userMapper.findOneByUsername(userLoginForm.getUsername());
 
         log.info("userLogin: {}", user);
-
+        
         if (user == null) {
             throw new BusinessException(1, "用户未注册");
         }
@@ -57,8 +61,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(2, "账号或密码错误");
         }
 
+        // 存储用户id，并生成 token
+        StpUtil.login(user.getUserId());
+
+        SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+
         UserLoginFormResponse res = new UserLoginFormResponse();
-        res.setToken("114514").setExpireTime("2024-03-11 11:11:11");
+
+        res.setToken(tokenInfo.tokenValue).setTokenTimeout(tokenInfo.tokenTimeout);
+
         return res;
     }
 }

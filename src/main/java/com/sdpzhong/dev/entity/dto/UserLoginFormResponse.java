@@ -9,6 +9,9 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class UserLoginFormResponse implements Serializable {
 
+    // 登录凭证
     private String token;
-    private String expireTime;
+
+    // 剩余有效期（秒）
+    private long tokenTimeout;
 }
