@@ -5,6 +5,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * @Author: zhongqing
+ * @Description: satoken 初始化
+ * @Date: 2024-07-05 10:42
+ **/
+
 @SpringBootApplication
 public class SaTokenApplication {
     public static void main(String[] args) throws JsonProcessingException {

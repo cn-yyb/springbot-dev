@@ -22,12 +22,11 @@ public class HttpInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         log.info("preHandle end, response:{}", response);
         // 请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）
-        System.out.println("Post Handle");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         // 在整个请求结束之后调用，也就是在DispatcherServlet渲染了视图执行
-        System.out.println("After Completion");
+        log.info("afterCompletion start, response:{}", response);
     }
 }

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: dev-service
+
+# Nacos Setting
+nacos:
+  discovery:
+    server-addr: 127.0.0.1:8848
+    # 开启服务发现后，必须设置。否则控制台不会显示服务
+    auto-register: true
+  config:
+    server-addr: 127.0.0.1:8848
+    data-id: application-dev
+    group: DEFAULT_GROUP
+    type: yaml

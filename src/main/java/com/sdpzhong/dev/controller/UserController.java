@@ -1,6 +1,11 @@
 package com.sdpzhong.dev.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import com.alibaba.nacos.api.annotation.NacosInjected;
+import com.alibaba.nacos.api.config.annotation.NacosValue;
+import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.api.naming.NamingService;
+import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.sdpzhong.dev.config.ComponentTest;
 import com.sdpzhong.dev.config.bean.UserBean;
 import com.sdpzhong.dev.entity.dto.UserLoginFormDto;
@@ -14,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @RestController
 @RequestMapping("/user")
@@ -59,5 +66,33 @@ public class UserController {
     void register(@RequestBody User user) {
 
         log.info("register form: {}", user);
+    }
+
+    @NacosValue(value = "${isDev:false}", autoRefreshed = true)
+    private boolean isDev;
+
+    @NacosValue(value = "${port:7777}", autoRefreshed = true)
+    private int port;
+
+    @GetMapping("/getEnv")
+    Map<String, Object> getEnv() {
+        Map<String, Object> env = new TreeMap<>();
+
+        env.put("isDev", isDev);
+
+        env.put("port", port);
+
+        return env;
+    }
+
+
+    @NacosInjected
+    private NamingService namingService;
+
+    @GetMapping("/getServiceByName")
+    @ResponseBody
+    public List<Instance> getServiceByName(@RequestParam String serviceName) throws NacosException {
+
+        return namingService.getAllInstances(serviceName);
     }
 }
