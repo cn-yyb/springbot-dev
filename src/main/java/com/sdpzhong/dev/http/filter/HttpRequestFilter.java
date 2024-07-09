@@ -55,7 +55,7 @@ public class HttpRequestFilter implements Filter {
         };
 
 
-        log.info("satoken: {}", requestWrapper.getHeader("satoken"));
+        // log.info("satoken: {}", requestWrapper.getHeader("satoken"));
 
         filterChain.doFilter(requestWrapper, servletResponse);
     }

@@ -1,9 +1,11 @@
 package com.sdpzhong.dev.http;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 @Data
+@Accessors(chain = true)
 public class HttpResponseInfo<T> {
 
     private Integer errcode; //状态码
@@ -19,18 +21,18 @@ public class HttpResponseInfo<T> {
     }
 
     public static <T> HttpResponseInfo<T> success(T data) {
-        HttpResponseInfo<T> r = new HttpResponseInfo<>();
-        r.setErrcode(HttpReturnCode.RC_NORMAL.getCode());
-        r.setErrmsg(HttpReturnCode.RC_NORMAL.getMsg());
-        r.setData(data);
-        return r;
+        HttpResponseInfo<T> responseInfo = new HttpResponseInfo<>();
+        responseInfo.setErrcode(HttpReturnCode.RC_NORMAL.getCode())
+                .setErrmsg(HttpReturnCode.RC_NORMAL.getMsg())
+                .setData(data);
+        return responseInfo;
     }
 
     public static <T> HttpResponseInfo<T> error(int code, String msg) {
-        HttpResponseInfo<T> r = new HttpResponseInfo<>();
-        r.setErrcode(code);
-        r.setErrmsg(msg);
-        r.setData(null);
-        return r;
+        HttpResponseInfo<T> responseInfo = new HttpResponseInfo<>();
+        responseInfo.setErrcode(code)
+                .setErrmsg(msg)
+                .setData(null);
+        return responseInfo;
     }
 }

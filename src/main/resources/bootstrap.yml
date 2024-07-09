@@ -1,6 +1,9 @@
 spring:
   application:
     name: dev-service
+  devtools:
+    restart:
+      enabled: false
 
 # Nacos Setting
 nacos:
@@ -12,4 +15,5 @@ nacos:
     server-addr: 127.0.0.1:8848
     data-id: application-dev
     group: DEFAULT_GROUP
-    type: yaml
+    max-retry: 10
+    config-retry-time: 2

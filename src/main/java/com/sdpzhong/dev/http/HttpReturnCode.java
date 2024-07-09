@@ -5,11 +5,13 @@ import lombok.Getter;
 @Getter
 public enum HttpReturnCode {
     RC_NORMAL(0, "ok"),
+    RC_FAIL(1, "fail"),
     RC200(200, "ok"),
     RC400(400, "请求失败，参数错误，请检查后重试。"),
+    RC401(401, "无效token"),
     RC404(404, "未找到您请求的资源。"),
     RC405(405, "请求方式错误，请检查后重试。"),
-    RC500(500, "操作失败，服务器繁忙或服务器错误，请稍后再试。");
+    RC500(500, "服务器错误，请稍后重试");
 
     // 自定义状态码
     private final int code;

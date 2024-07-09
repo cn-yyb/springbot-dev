@@ -14,19 +14,19 @@ public class HttpInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 在请求处理之前进行调用（Controller方法调用之前）
-        log.info("preHandle start, request:{}", request.getHeader("Authorization"));
+        // log.info("preHandle start, request:{}", request.getHeader("Authorization"));
         return true; // 如果返回false，则停止流程，api不会被调用
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("preHandle end, response:{}", response);
+        // log.info("preHandle end, response:{}", response);
         // 请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         // 在整个请求结束之后调用，也就是在DispatcherServlet渲染了视图执行
-        log.info("afterCompletion start, response:{}", response);
+        // log.info("afterCompletion start, response:{}", response);
     }
 }
