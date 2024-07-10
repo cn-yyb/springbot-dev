@@ -2,6 +2,11 @@ package com.sdpzhong.dev.http;
 
 import lombok.Getter;
 
+/**
+ * @Author: zhongqing
+ * @Description: 自定义http状态码枚举
+ * @Date: 2024-07-10 10:02
+ **/
 @Getter
 public enum HttpReturnCode {
     RC_NORMAL(0, "ok"),

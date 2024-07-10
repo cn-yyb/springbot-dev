@@ -11,6 +11,8 @@ import com.sdpzhong.dev.entity.dto.UserLoginFormResponse;
 import com.sdpzhong.dev.entity.po.User;
 import com.sdpzhong.dev.http.BusinessException;
 import com.sdpzhong.dev.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import java.util.TreeMap;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @Slf4j
+@Api(tags = "用户模块", consumes = "1212")
 public class UserController {
 
     private final UserService userService;
@@ -34,18 +37,19 @@ public class UserController {
 
     @SaCheckLogin
     @GetMapping("/getUserList")
+    @ApiOperation("获取用户列表")
     public List<User> getUserList(@RequestParam(required = false, defaultValue = "") String username) {
         return userService.getUserList();
     }
 
     @SaCheckLogin
     @GetMapping("/getUserInfo")
+    @ApiOperation("获取用户信息")
     public User getUserInfo(@RequestParam(required = false) String username) {
         // userBean.sayHello();
         // if (username != null) {
         //     componentTest.sayHello(username);
         // }
-
         if (username == null || username.isEmpty()) {
             throw new BusinessException(400, "username 不能为空");
         }

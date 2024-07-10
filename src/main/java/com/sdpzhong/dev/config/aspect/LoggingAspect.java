@@ -1,5 +1,6 @@
 package com.sdpzhong.dev.config.aspect;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sdpzhong.dev.entity.RequestLogEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,6 +12,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 @Slf4j
 public class LoggingAspect {
+
+    @Resource
+    private ObjectMapper objectMapper;
 
     @PostConstruct
     public void init() {
@@ -41,8 +46,8 @@ public class LoggingAspect {
         try {
             result = joinPoint.proceed(args);
         } catch (Throwable throwable) {
-//            log.error(throwable.getMessage(), throwable);
-            requestLogEntity.setResult(throwable.getMessage());
+            // log.error(throwable.getMessage(), throwable);
+            requestLogEntity.setError(throwable.getMessage());
             throw throwable;
         } finally {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -64,7 +69,7 @@ public class LoggingAspect {
                 if (response != null) {
                     statusCode = response.getStatus();
                 }
-                
+
                 requestLogEntity
                         .setToken(token)
                         .setUrl(requestURI)
@@ -72,17 +77,14 @@ public class LoggingAspect {
                         .setIp(ip)
                         .setQueryString(queryString)
                         .setStatusCode(statusCode)
-                        .setArguments(argument);
-
-                if (requestLogEntity.result != null) {
-                    requestLogEntity.setResult(result);
-                }
-
+                        .setArguments(argument)
+                        .setResult(result);
                 // 打印日志
                 requestLogEntity.consoleLog();
             }
         }
-        // 可篡改返回值
+        // 统一处理返回格式
         return result;
+
     }
 }

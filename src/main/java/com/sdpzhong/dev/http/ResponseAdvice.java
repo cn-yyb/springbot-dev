@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * 拦截controller返回值，封装后统一返回格式
  */
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = {"com.sdpzhong.dev.controller"})
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Resource
@@ -28,18 +28,25 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @SneakyThrows
     @Override
-    public Object beforeBodyWrite(Object o, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        //如果Controller返回String的话，SpringBoot不会帮我们自动封装而直接返回，因此我们需要手动转换成json。
-        if (o instanceof String) {
-            System.out.println("selectedContentType: " + selectedContentType);
+    public Object beforeBodyWrite(Object result, MethodParameter returnType, MediaType selectedContentType,
+                                  Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+
+        if (result instanceof String) {
             response.getHeaders().set("content-type", "application/json;charset=UTF-8");
-            return objectMapper.writeValueAsString(HttpResponseInfo.success(o));
+            return objectMapper.writeValueAsString(HttpResponseInfo.success(result));
         }
-        //如果返回的结果是R对象，即已经封装好的，直接返回即可。
-        //如果不进行这个判断，后面进行全局异常处理时会出现错误
-        if (o instanceof HttpResponseInfo) {
-            return o;
+
+        if (selectedContentType.isCompatibleWith(MediaType.APPLICATION_JSON)) {
+            
+            if (result instanceof HttpResponseInfo) {
+                return result;
+            }
+
+            return HttpResponseInfo.success(result);
+        } else {
+            return result;
         }
-        return HttpResponseInfo.success(o);
+
+
     }
 }

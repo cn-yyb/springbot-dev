@@ -4,6 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * @Author: zhongqing
+ * @Description: 自定义异常
+ * @Date: 2024-07-10 10:01
+ **/
+
 @Getter
 @Setter
 @Accessors(chain = true)

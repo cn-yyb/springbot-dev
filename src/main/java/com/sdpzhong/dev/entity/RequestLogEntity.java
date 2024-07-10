@@ -58,6 +58,11 @@ public class RequestLogEntity {
     public Object result;
 
     /**
+     * error: 错误信息
+     */
+    public Object error;
+
+    /**
      * date: 日期
      */
     public String date;

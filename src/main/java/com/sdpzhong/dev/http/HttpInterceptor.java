@@ -8,6 +8,12 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+/**
+ * @Author: zhongqing
+ * @Description: HttpInterceptor 拦截器
+ * @Date: 2024-07-10 10:00
+ **/
 @Slf4j
 @Component
 public class HttpInterceptor implements HandlerInterceptor {
@@ -22,6 +28,7 @@ public class HttpInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         // log.info("preHandle end, response:{}", response);
         // 请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）
+        // 可篡改返回值
     }
 
     @Override

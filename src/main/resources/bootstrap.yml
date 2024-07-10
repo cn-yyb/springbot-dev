@@ -4,6 +4,9 @@ spring:
   devtools:
     restart:
       enabled: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 # Nacos Setting
 nacos:

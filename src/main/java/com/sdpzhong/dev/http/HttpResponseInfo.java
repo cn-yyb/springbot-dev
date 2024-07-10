@@ -3,6 +3,11 @@ package com.sdpzhong.dev.http;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+/**
+ * @Author: zhongqing
+ * @Description: 全局统一接口返回格式实体
+ * @Date: 2024-07-10 10:00
+ **/
 
 @Data
 @Accessors(chain = true)
@@ -35,4 +40,5 @@ public class HttpResponseInfo<T> {
                 .setData(null);
         return responseInfo;
     }
+
 }
