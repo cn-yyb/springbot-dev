@@ -8,7 +8,7 @@
         user_id
         , uid, account_name, gender, mobile
     </sql>
-    <select id="getUserByUsername" resultType="com.sdpzhong.dev.entity.po.User">
+    <select id="queryUserByUsername" resultType="com.sdpzhong.dev.entity.po.User">
         select
         <include refid="getUserByUsernameQueryColumnList"/>
         from users

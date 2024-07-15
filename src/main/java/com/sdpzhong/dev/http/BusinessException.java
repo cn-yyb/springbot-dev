@@ -1,5 +1,6 @@
 package com.sdpzhong.dev.http;
 
+import com.sdpzhong.dev.common.HttpReturnCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

@@ -1,9 +1,12 @@
 package com.sdpzhong.dev.http;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import com.sdpzhong.dev.common.HttpReturnCode;
 import com.sdpzhong.dev.utils.LogTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -34,7 +38,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.OK)
     public HttpResponseInfo<String> businessException(BusinessException e) {
-//        log.error("业务异常 code={}, BusinessException = {}", e.getCode(), e.getMessage(), e);
+        // log.error("业务异常 code={}, BusinessException = {}", e.getCode(), e.getMessage(), e);
         Map<String, Object> map = new TreeMap<>();
         map.put("code", e.getCode());
         map.put("msg", e.getMessage());
@@ -79,6 +83,26 @@ public class RestExceptionHandler {
 
 
     /**
+     * 参数校验错误
+     *
+     * @param e MethodArgumentNotValidException
+     * @return HttpResponseInfo<String>
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public HttpResponseInfo<String> methodArgumentNotValidException(MethodArgumentNotValidException e) {
+
+        String errorMsg = combineErrors(e);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg", "MethodArgumentNotValidException " + errorMsg);
+        map.put("exception", e);
+        log.error(LogTemplate.createLogTemplate(map));
+
+        return HttpResponseInfo.error(HttpReturnCode.RC400.getCode(), errorMsg);
+    }
+
+    /**
      * 空指针异常
      *
      * @param e SaTokenException
@@ -88,7 +112,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(NotLoginException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public HttpResponseInfo<String> unAuthorizationException(NotLoginException e) {
-//        log.error("未授权访问 UnAuthorizationException ", e);
+        // log.error("未授权访问 UnAuthorizationException ", e);
         Map<String, Object> map = new TreeMap<>();
         map.put("code", e.getCode());
         map.put("msg", "未授权访问 UnAuthorizationException " + e.getMessage());
@@ -110,5 +134,23 @@ public class RestExceptionHandler {
         // 其他异常不做处理，输出异常信息即可
         log.error("未知异常 exception = {}", e.getMessage(), e);
         return HttpResponseInfo.error(HttpReturnCode.RC500.getCode(), HttpReturnCode.RC500.getMsg());
+    }
+
+
+    /**
+     * 处理参数校验异常错误信息
+     *
+     * @param exception MethodArgumentNotValidException
+     * @return String errorResult
+     */
+    private String combineErrors(MethodArgumentNotValidException exception) {
+        Map<String, Object> errors = new HashMap<>();
+        exception.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        return errors.toString();
     }
 }
