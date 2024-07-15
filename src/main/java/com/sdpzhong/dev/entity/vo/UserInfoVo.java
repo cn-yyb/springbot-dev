@@ -17,7 +17,7 @@ public class UserInfoVo implements Serializable {
     private String uid;
 
     @Schema(description = "性别")
-    private String gender;
+    private Integer gender;
 
     @Schema(description = "手机号")
     private String mobile;

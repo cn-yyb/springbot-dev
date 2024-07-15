@@ -6,11 +6,12 @@ import com.sdpzhong.dev.entity.po.User;
 import com.sdpzhong.dev.entity.vo.UserInfoVo;
 import com.sdpzhong.dev.entity.vo.UserLoginResponseVo;
 
-import java.util.List;
-
+/**
+ * @author zhongqing
+ * @description 针对表【t_user(用户表)】的数据库操作Service
+ * @createDate 2024-07-15 17:46:44
+ */
 public interface UserService extends IService<User> {
-    List<User> getUserList();
-
     // 用户登录
     UserLoginResponseVo userLogin(UserLoginFormDto userLoginForm);
 
@@ -18,5 +19,4 @@ public interface UserService extends IService<User> {
 
     // 获取用户信息
     UserInfoVo getUserInfo();
-
 }

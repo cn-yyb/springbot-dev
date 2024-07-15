@@ -3,7 +3,6 @@ package com.sdpzhong.dev.service.impl;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sdpzhong.dev.common.HttpReturnCode;
 import com.sdpzhong.dev.entity.dto.UserLoginFormDto;
@@ -20,9 +19,13 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author zhongqing
+ * @description 针对表【t_user(用户表)】的数据库操作Service实现
+ * @createDate 2024-07-15 17:46:44
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -33,34 +36,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Override
-    public List<User> getUserList() {
-        String data = (String) redisTemplate.opsForValue().get("username");
-        log.info("redis data: {}", data);
-
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().select(User::getUserId, User::getAccountName).lt(User::getUserId, 10);
-        List<User> res = userMapper.selectList(queryWrapper);
-        log.info("getUserList: {}", res);
-
-        return res;
-    }
+    // @Override
+    // public List<User> getUserList() {
+    //     String data = (String) redisTemplate.opsForValue().get("username");
+    //     log.info("redis data: {}", data);
+    //
+    //     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    //     queryWrapper.lambda().select(User::getUserId, User::getAccountName).lt(User::getUserId, 10);
+    //     List<User> res = userMapper.selectList(queryWrapper);
+    //     log.info("getUserList: {}", res);
+    //
+    //     return res;
+    // }
 
 
     @Override
     public UserLoginResponseVo userLogin(UserLoginFormDto userLoginForm) {
 
-        // User user = userMapper.findOneByUsername(userLoginForm.getUsername());
-
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
 
         queryWrapper
-                .select(User::getPassword, User::getUserId, User::getAccountName)
-                .eq(User::getAccountName, userLoginForm.getUsername());
+                .select(User::getPassword, User::getUid, User::getUsername)
+                .eq(User::getUsername, userLoginForm.getUsername());
 
         User user = getOne(queryWrapper);
-
-        log.info("userLogin: {}", user);
 
         if (user == null) {
             throw new BusinessException(HttpReturnCode.RC_NO_REGISTERED);
@@ -71,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         // 存储用户id，并生成 token
-        StpUtil.login(user.getUserId());
+        StpUtil.login(user.getUid());
 
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
 
@@ -94,10 +93,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         return new UserInfoVo()
-                .setUsername(user.getAccountName())
+                .setUsername(user.getUsername())
                 .setUid(user.getUid())
                 .setMobile(user.getMobile())
                 .setGender(user.getGender());
     }
 
 }
+
+
+
+
+
