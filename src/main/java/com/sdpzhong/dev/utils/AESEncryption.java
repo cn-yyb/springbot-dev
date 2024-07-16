@@ -17,7 +17,7 @@ import java.util.Base64;
 /**
  * AES 加
  */
-public class PasswordAESEncryption {
+public class AESEncryption {
     private static final String ALGORITHM = "AES";
     private static final int KEY_SIZE = 256;
 
