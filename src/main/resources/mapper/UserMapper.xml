@@ -9,6 +9,7 @@
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="passwordSalt" column="password_salt" jdbcType="VARCHAR"/>
         <result property="status" column="status" jdbcType="INTEGER"/>
         <result property="gender" column="gender" jdbcType="INTEGER"/>
         <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
@@ -19,14 +20,15 @@
         <result property="birthday" column="birthday" jdbcType="DATE"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         uid, username, nick_name,
-        password, status, gender,
+        password, password_salt, status, gender,
         avatar, bio, sign,
         email, mobile, birthday,
-        create_time, update_time
+        create_time, update_time, deleted
     </sql>
 
     <!--  查询用户信息 -->

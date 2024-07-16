@@ -26,7 +26,7 @@ public enum HttpReturnCode {
     RC_WRONG_PASSWORD(1002, "密码错误"),
     RC_LOGIN_REJECTED(1003, "账号或密码错误"),
     RC_ACCOUNT_REJECTED(1004, "账号状态异常"),
-    RC_ACCOUNT_REGISTERED(1005, "该用户名已经注册"),
+    RC_ACCOUNT_REGISTERED(1005, "该用户名已经被注册"),
 
     // ..
     ;

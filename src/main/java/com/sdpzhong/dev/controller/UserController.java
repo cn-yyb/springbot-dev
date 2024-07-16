@@ -1,8 +1,8 @@
 package com.sdpzhong.dev.controller;
 
 import com.sdpzhong.dev.entity.dto.UserLoginFormDto;
+import com.sdpzhong.dev.entity.dto.UserRegisterFormDto;
 import com.sdpzhong.dev.entity.po.User;
-import com.sdpzhong.dev.entity.vo.UserInfoVo;
 import com.sdpzhong.dev.entity.vo.UserLoginResponseVo;
 import com.sdpzhong.dev.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,13 +29,13 @@ public class UserController {
 
     @Operation(summary = "用户注册")
     @PostMapping("/register")
-    public void register(@RequestBody User user) {
-        log.info("register form: {}", user);
+    public boolean register(@RequestBody @Validated UserRegisterFormDto registerForm) {
+        return userService.userRegister(registerForm);
     }
 
     @Operation(summary = "获取用户信息")
     @GetMapping("/getUserInfo")
-    public UserInfoVo getUserInfo() {
+    public User getUserInfo() {
         return userService.getUserInfo();
     }
 }

@@ -6,6 +6,7 @@ import com.sdpzhong.dev.utils.LogTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -100,6 +101,16 @@ public class RestExceptionHandler {
         log.error(LogTemplate.createLogTemplate(map));
 
         return HttpResponseInfo.error(HttpReturnCode.RC400.getCode(), errorMsg);
+    }
+    
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public HttpResponseInfo<String> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        Map<String, Object> map = new TreeMap<>();
+        map.put("msg", "请求方法不支持 HttpRequestMethodNotSupportedException " + e.getMessage());
+        map.put("exception", e);
+        log.error(LogTemplate.createLogTemplate(map));
+        return HttpResponseInfo.error(HttpReturnCode.RC405.getCode(), HttpReturnCode.RC405.getMsg());
     }
 
     /**

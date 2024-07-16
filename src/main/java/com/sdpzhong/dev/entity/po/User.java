@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,6 +20,7 @@ import java.util.Date;
 @Data
 @ApiModel("UserModel")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Accessors(chain = true)
 public class User implements Serializable {
     /**
      * 用户编号
@@ -47,6 +49,13 @@ public class User implements Serializable {
     @ApiModelProperty(value = "密码", hidden = true)
     @TableField(value = "password", select = false)
     private String password;
+
+    /**
+     * 密码盐
+     */
+    @ApiModelProperty(value = "密码盐", hidden = true)
+    @TableField(value = "password_salt", select = false)
+    private String passwordSalt;
 
     /**
      * 状态 0-正常 ｜ 1-禁用
@@ -119,6 +128,10 @@ public class User implements Serializable {
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
+
+    @TableField(value = "deleted", select = false)
+    @TableLogic(value = "0", delval = "1")
+    private Integer deleted;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

@@ -6,12 +6,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sdpzhong.dev.common.HttpReturnCode;
 import com.sdpzhong.dev.entity.dto.UserLoginFormDto;
+import com.sdpzhong.dev.entity.dto.UserRegisterFormDto;
 import com.sdpzhong.dev.entity.po.User;
-import com.sdpzhong.dev.entity.vo.UserInfoVo;
 import com.sdpzhong.dev.entity.vo.UserLoginResponseVo;
 import com.sdpzhong.dev.http.BusinessException;
 import com.sdpzhong.dev.mapper.UserMapper;
 import com.sdpzhong.dev.service.UserService;
+import com.sdpzhong.dev.utils.PasswordCipher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.Base64;
 
 /**
  * @author zhongqing
@@ -36,19 +37,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    // @Override
-    // public List<User> getUserList() {
-    //     String data = (String) redisTemplate.opsForValue().get("username");
-    //     log.info("redis data: {}", data);
-    //
-    //     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-    //     queryWrapper.lambda().select(User::getUserId, User::getAccountName).lt(User::getUserId, 10);
-    //     List<User> res = userMapper.selectList(queryWrapper);
-    //     log.info("getUserList: {}", res);
-    //
-    //     return res;
-    // }
-
 
     @Override
     public UserLoginResponseVo userLogin(UserLoginFormDto userLoginForm) {
@@ -56,7 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
 
         queryWrapper
-                .select(User::getPassword, User::getUid, User::getUsername)
+                .select(User::getPassword, User::getPasswordSalt, User::getUid, User::getUsername)
                 .eq(User::getUsername, userLoginForm.getUsername());
 
         User user = getOne(queryWrapper);
@@ -65,7 +53,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(HttpReturnCode.RC_NO_REGISTERED);
         }
 
-        if (!Objects.equals(user.getPassword(), userLoginForm.getPassword())) {
+        // 生成密钥进行比对
+        if (!PasswordCipher.comparePassword(userLoginForm.getPassword(), user.getPassword(), user.getPasswordSalt())) {
             throw new BusinessException(HttpReturnCode.RC_LOGIN_REJECTED);
         }
 
@@ -80,7 +69,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public UserInfoVo getUserInfo() {
+    public boolean userRegister(UserRegisterFormDto registerForm) {
+        // 判断用户名是否被注册
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper.eq(User::getUsername, registerForm.getUsername());
+
+        if (userMapper.selectCount(queryWrapper) > 0) {
+            throw new BusinessException(HttpReturnCode.RC_ACCOUNT_REGISTERED);
+        }
+
+        // 正常注册流程
+        User user = new User();
+
+        // 生成加密密码和盐
+        String password = registerForm.getPassword();
+        byte[] salt = PasswordCipher.generateSalt();
+        String hashedPassword = PasswordCipher.hashPassword(password, salt);
+
+        user.setUsername(registerForm.getUsername())
+                .setPassword(hashedPassword)
+                .setPasswordSalt(Base64.getEncoder().encodeToString(salt))
+                .setEmail(registerForm.getEmail());
+
+        return save(user);
+    }
+
+    @Override
+    public User getUserInfo() {
         // 通过token查询出用户id
         Object userId = StpUtil.getLoginId();
 
@@ -92,11 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(HttpReturnCode.RC_NO_REGISTERED);
         }
 
-        return new UserInfoVo()
-                .setUsername(user.getUsername())
-                .setUid(user.getUid())
-                .setMobile(user.getMobile())
-                .setGender(user.getGender());
+        return user;
     }
 
 }
