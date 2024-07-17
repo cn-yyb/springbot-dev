@@ -36,7 +36,6 @@ public class MybatisPlusConfig implements MetaObjectHandler {
     /**
      * 实现创建时间&更新时间字段自动更新
      */
-
     @Override
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "createTime", Date.class, new Date());

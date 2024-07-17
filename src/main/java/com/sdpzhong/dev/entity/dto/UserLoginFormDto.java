@@ -12,14 +12,14 @@ public class UserLoginFormDto implements Serializable {
     /*
      *  用户名
      * */
-    @Schema(name = "用户名")
+    @Schema(description = "用户名")
     @NotBlank
     private String username;
 
     /*
      * 密码（MD5 加密）
      * */
-    @Schema(name = "密码", description = "密码（需进行MD5加密）")
+    @Schema(description = "密码（需进行MD5加密）")
     @NotBlank
     private String password;
 

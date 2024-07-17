@@ -12,12 +12,26 @@ import com.sdpzhong.dev.entity.vo.UserLoginResponseVo;
  * @createDate 2024-07-15 17:46:44
  */
 public interface UserService extends IService<User> {
-    // 账号登录
+    /**
+     * 账号登录
+     *
+     * @param loginForm
+     * @return
+     */
     UserLoginResponseVo userLogin(UserLoginFormDto loginForm);
 
-    // 账号注册
+    /**
+     * 账号注册
+     *
+     * @param registerForm
+     * @return
+     */
     boolean userRegister(UserRegisterFormDto registerForm);
 
-    // 获取账号信息
+    /**
+     * 获取账号信息
+     *
+     * @return
+     */
     User getUserInfo();
 }

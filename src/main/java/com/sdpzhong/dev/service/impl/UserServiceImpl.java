@@ -75,7 +75,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         queryWrapper.eq(User::getUsername, registerForm.getUsername());
 
-        if (userMapper.selectCount(queryWrapper) > 0) {
+        if (count(queryWrapper) > 0) {
             throw new BusinessException(HttpReturnCode.RC_ACCOUNT_REGISTERED);
         }
 
@@ -100,9 +100,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 通过token查询出用户id
         Object userId = StpUtil.getLoginId();
 
-        log.info("getUserInfo: {}", userId);
-
-        User user = this.getById((Serializable) userId);
+        User user = getById((Serializable) userId);
 
         if (user == null) {
             throw new BusinessException(HttpReturnCode.RC_NO_REGISTERED);

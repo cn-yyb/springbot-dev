@@ -12,10 +12,22 @@ import org.apache.ibatis.annotations.Select;
  * @Entity com.sdpzhong.dev.entity.po.User
  */
 public interface UserMapper extends BaseMapper<User> {
-    // 获取用户信息
+
+    /**
+     * 获取用户信息
+     *
+     * @param username String
+     * @return User
+     */
     User queryUserByUsername(String username);
 
-    @Select("SELECT * FROM users WHERE username = #{username}")
+    /**
+     * 获取用户信息
+     *
+     * @param username String
+     * @return User
+     */
+    @Select("SELECT * FROM t_user WHERE username = #{username}")
     User findOneByUsername(@Param("username") String username);
 }
 

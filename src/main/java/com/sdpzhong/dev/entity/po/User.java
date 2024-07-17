@@ -19,7 +19,6 @@ import java.util.Date;
 @TableName(value = "t_user")
 @Data
 @ApiModel("UserModel")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Accessors(chain = true)
 public class User implements Serializable {
     /**
@@ -46,6 +45,7 @@ public class User implements Serializable {
     /**
      * 密码
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @ApiModelProperty(value = "密码", hidden = true)
     @TableField(value = "password", select = false)
     private String password;
@@ -53,6 +53,7 @@ public class User implements Serializable {
     /**
      * 密码盐
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @ApiModelProperty(value = "密码盐", hidden = true)
     @TableField(value = "password_salt", select = false)
     private String passwordSalt;
@@ -129,6 +130,7 @@ public class User implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @TableField(value = "deleted", select = false)
     @TableLogic(value = "0", delval = "1")
     private Integer deleted;
