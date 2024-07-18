@@ -9,16 +9,25 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @SpringBootApplication
+// log
 @Slf4j
+// mapper文件扫描（省去 @Mapper 注解）
 @MapperScan("com.sdpzhong.dev.mapper")
+// nacos 配置文件
 @NacosPropertySource(dataId = "application-dev", autoRefreshed = true, type = ConfigType.YAML)
+// 允许 nacos 客户端被服务端扫描并获取
 @EnableDiscoveryClient
+// 异步支持
 @EnableAsync
+// 事务支持
 @EnableTransactionManagement
+// 定时任务
+@EnableScheduling
 public class DevApplication {
 
     public static void main(String[] args) {

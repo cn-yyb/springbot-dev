@@ -5,8 +5,8 @@ import com.sdpzhong.dev.entity.dto.UserRegisterFormDto;
 import com.sdpzhong.dev.entity.po.User;
 import com.sdpzhong.dev.entity.vo.UserLoginResponseVo;
 import com.sdpzhong.dev.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -16,24 +16,24 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
-@Tag(name = "用户模块", description = "用户相关接口模块")
+@Api(tags = "用户模块", description = "用户相关接口")
 public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "用户登录")
+    @ApiOperation("用户登录")
     @PostMapping("/login")
     public UserLoginResponseVo login(@RequestBody @Validated UserLoginFormDto loginForm) {
         return userService.userLogin(loginForm);
     }
 
-    @Operation(summary = "用户注册")
+    @ApiOperation("用户注册")
     @PostMapping("/register")
     public boolean register(@RequestBody @Validated UserRegisterFormDto registerForm) {
         return userService.userRegister(registerForm);
     }
 
-    @Operation(summary = "获取用户信息")
+    @ApiOperation("获取用户信息")
     @GetMapping("/getUserInfo")
     public User getUserInfo() {
         return userService.getUserInfo();

@@ -20,4 +20,9 @@ public interface ArticleService extends IService<Article> {
      * @return
      */
     IPage<Article> getArticlePage(int pageNum, int pageSize);
+
+    /**
+     * 自动更新定时发布状态的文章为发布态
+     */
+    void refreshArticlePendingPublishStatusRecords();
 }

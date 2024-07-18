@@ -31,7 +31,8 @@ public class SwaggerConfig {
                 .securitySchemes(securitySchemes())
                 .securityContexts(securityContexts())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sdpzhong.dev.controller")
+                .apis(
+                        RequestHandlerSelectors.basePackage("com.sdpzhong.dev.controller")
                         // basePackage("com.sdpzhong.dev.controller")
                         //.basePackage(com.xx.xx.controller) 扫描指定包下的接口，最为常用
                         //.withClassAnnotation(RestController.class) // 扫描带有指定注解的类下所有接口

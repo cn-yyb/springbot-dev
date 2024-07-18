@@ -55,6 +55,7 @@
                ta.publish_time,
                ta.create_time,
                ta.update_time,
+               ta.uid as uid,
                tu.uid as userId,
                tu.username,
                tu.gender,
